@@ -1,0 +1,1004 @@
+{
+  "name": "customer support",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "21a394ee-3101-4249-8604-438c8cebc9b9",
+      "name": "Telegram Trigger",
+      "webhookId": "41b66f5d-3a40-461f-b1b6-bc9226c42ecf",
+      "credentials": {
+        "telegramApi": {
+          "id": "flFfGIhwhSb7bpR1",
+          "name": "user_querry_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extract user data').item.json.chat_id }}",
+        "text": "=hello  {{ $('Extract user data').item.json.user_name }}\nWelcome to our Customer Support Bot. I can help you with:\n\n🔍 Order Status - Type your order number\n❓ FAQ - Common questions and answers\n📞 Contact Support - Connect with human agent\n💳 Billing - Billing and payment questions\n🚚 Shipping - Delivery information\n\nJust type what you need help with, or use these commands:\n\n• /faq - View frequently asked questions\n• /contact - Speak to human support\n• /status - Check order status\n\nHow can I assist you today?\n",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        -160
+      ],
+      "id": "a31ef3d5-8cc1-4929-9927-e4b483a04916",
+      "name": "Send a text message",
+      "webhookId": "c479148e-8047-4f40-a7be-5248c4793c4f",
+      "credentials": {
+        "telegramApi": {
+          "id": "flFfGIhwhSb7bpR1",
+          "name": "user_querry_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "75bdbd3d-2f98-467b-8d5d-41d6cde896e6",
+              "name": "user_id",
+              "value": "={{ $json.update_id }}",
+              "type": "number"
+            },
+            {
+              "id": "a8e23546-84bc-4f2b-b36e-a643c6008a2d",
+              "name": "user_name",
+              "value": "={{ $json.message.from.first_name }}{{ $json.message.from.last_name || ' ' }}",
+              "type": "string"
+            },
+            {
+              "id": "0a96befb-e08e-4ee8-b67a-3424fb2fef18",
+              "name": "username",
+              "value": "={{ $json.message.from.username || 'N/A' }}",
+              "type": "string"
+            },
+            {
+              "id": "8bd42429-d74d-45bb-a600-a40f38880899",
+              "name": "message_text",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "09fb1918-28c6-4f31-a3cf-ac165245e504",
+              "name": "chat_id",
+              "value": "={{ $json.message.from.id }}",
+              "type": "number"
+            },
+            {
+              "id": "01334982-1f94-45d2-8e6c-8b912c85939e",
+              "name": "timestamp",
+              "value": "={{ new Date().toISOString()  }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3148d8ad-24da-4b7b-8b9f-b049d7e5e924",
+      "name": "Extract user data"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extract user data').item.json.chat_id }}",
+        "text": "=**Frequently Asked Questions**\n\n**1. How can I track my order?**\nYou can track your order using your Order ID. Please provide your Order ID, and we’ll check the latest status for you.\n\n**2. How long does delivery take?**\nStandard delivery usually takes 3–5 business days.\n\n**3. Can I cancel my order?**\nYes, you can cancel your order if it has not been shipped yet. Please provide your Order ID for assistance.\n\n**4. Can I return a product?**\nYes, products can be returned within 7 days of delivery, subject to our return policy.\n\n**5. What if I received a damaged or wrong product?**\nPlease contact our support team with your Order ID, and we’ll assist you with the replacement or return.\n\n**6. How can I contact customer support?**\nYou can contact our support team by providing your Order ID and describing your issue. We’ll guide you through the next steps.\n\n",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        16
+      ],
+      "id": "3dbc64a1-42b8-47b5-a0fc-b64175127137",
+      "name": "Send a text message1",
+      "webhookId": "c479148e-8047-4f40-a7be-5248c4793c4f",
+      "credentials": {
+        "telegramApi": {
+          "id": "flFfGIhwhSb7bpR1",
+          "name": "user_querry_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ebc293ec-7d46-4ace-9a31-756bf558e132",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "/FAQ",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "4dc4f889-ce7e-4ed1-bdad-fd7631ccc018",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "faq",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "f0a8eb0a-dd8e-48b1-b3a9-7e32e8d334b4",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "question",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        32
+      ],
+      "id": "6b73109f-059d-42d3-9130-620d0a94c7df",
+      "name": "is FAQ"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ebc293ec-7d46-4ace-9a31-756bf558e132",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "(order\nstatus\ntrack\ntracking\ndelivery\nshipment\nwhere is my)",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            },
+            {
+              "id": "3d0cc68d-36af-4a5e-af48-ec601e11d8bc",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "/status",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        192
+      ],
+      "id": "c2e89701-6007-4cfc-ab1c-bdffd40a71b7",
+      "name": "is order inquiry"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ebc293ec-7d46-4ace-9a31-756bf558e132",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "/contact",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "8983bb4d-409a-4001-b8ad-4c3b6959bcc2",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "human",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "dc83d168-a5b4-4e48-808d-fd4f546a2703",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "agent",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        352
+      ],
+      "id": "0e305a7c-eadc-438b-be06-52f5e9c57f6f",
+      "name": "Need Human help?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ebc293ec-7d46-4ace-9a31-756bf558e132",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "/billing",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "8983bb4d-409a-4001-b8ad-4c3b6959bcc2",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "invoice",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "dc83d168-a5b4-4e48-808d-fd4f546a2703",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "payment",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "38402f38-afb9-4250-b2b0-253d9807edea",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "refund",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        528
+      ],
+      "id": "93b341c7-001e-4eb5-9df8-4c5bf549866c",
+      "name": "is billing query"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extract user data').item.json.chat_id }}",
+        "text": "=I’ve notified our support team. A team member will contact you shortly to assist you further.\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        336
+      ],
+      "id": "59d4e742-0e7b-4e31-b295-266f7a27285b",
+      "name": "Send a text message2",
+      "webhookId": "c479148e-8047-4f40-a7be-5248c4793c4f",
+      "credentials": {
+        "telegramApi": {
+          "id": "flFfGIhwhSb7bpR1",
+          "name": "user_querry_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extract user data').item.json.chat_id }}",
+        "text": "=✅ Order Found!\n\nOrder ID: {{ $json.message_text.match(/[A-Za-z]{2,5}\\d{4,8}|ORD\\d{4,8}|\\d{6,10}/)?.[0] || $json.message_text }}\nStatus: Shipped\nExpected Delivery: 16 August 2026\nCurrent Location: Delhi Hub",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        96
+      ],
+      "id": "bec5bc22-b8bf-46e0-972a-982ea0894200",
+      "name": "Send a text message3",
+      "webhookId": "c479148e-8047-4f40-a7be-5248c4793c4f",
+      "credentials": {
+        "telegramApi": {
+          "id": "flFfGIhwhSb7bpR1",
+          "name": "user_querry_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extract user data').item.json.chat_id }}",
+        "text": "=I can help with general billing queries, payments, refunds, and billing-related issues. Please share the details of your concern, and I’ll assist you.\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        512
+      ],
+      "id": "cc9a8542-6dd0-407c-ac2c-9ae2981c1735",
+      "name": "Send a text message4",
+      "webhookId": "c479148e-8047-4f40-a7be-5248c4793c4f",
+      "credentials": {
+        "telegramApi": {
+          "id": "flFfGIhwhSb7bpR1",
+          "name": "user_querry_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ebc293ec-7d46-4ace-9a31-756bf558e132",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "/start",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "8983bb4d-409a-4001-b8ad-4c3b6959bcc2",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "help",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "dc83d168-a5b4-4e48-808d-fd4f546a2703",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "hello",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        432,
+        -144
+      ],
+      "id": "68c5f588-a9b1-45b9-945a-319e0a2575dc",
+      "name": "is help required"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extract user data').item.json.chat_id }}",
+        "text": "=Please send your Order ID.\nExample: ORD12345",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        912,
+        272
+      ],
+      "id": "60312f58-6f48-41b4-a828-7799e7231f56",
+      "name": "Send a text message5",
+      "webhookId": "c479148e-8047-4f40-a7be-5248c4793c4f",
+      "credentials": {
+        "telegramApi": {
+          "id": "flFfGIhwhSb7bpR1",
+          "name": "user_querry_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "47ffc2de-b0a3-4b9e-bf54-e9d8ee6a9a2e",
+              "leftValue": "={{ $json.message_text }}",
+              "rightValue": "^[A-Za-z]{2,5}\\d{4,8}$",
+              "operator": {
+                "type": "string",
+                "operation": "regex"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        688,
+        176
+      ],
+      "id": "ed3ff46a-3387-4c89-8caf-559e83089da0",
+      "name": "Has Order ID"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Extract user data').item.json.chat_id }}",
+        "text": "=I can only assist with the following:\n\n📦 Order Status / Tracking\n💳 Billing Inquiry\n❓ FAQs\n👤 Talk to Support Agent\n\nPlease type one of the options above or use:\n/status  |  /billing  |  /help  |  /human",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        704
+      ],
+      "id": "e4d8aa14-2ef2-430a-b437-2834f34fa404",
+      "name": "Send a text message6",
+      "webhookId": "c479148e-8047-4f40-a7be-5248c4793c4f",
+      "credentials": {
+        "telegramApi": {
+          "id": "flFfGIhwhSb7bpR1",
+          "name": "user_querry_bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1OgzNkq_jBMQrWIzxCtsmZhsC43lrV0ztSCZilK2EOWk",
+          "mode": "list",
+          "cachedResultName": "user_query_bot_log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OgzNkq_jBMQrWIzxCtsmZhsC43lrV0ztSCZilK2EOWk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OgzNkq_jBMQrWIzxCtsmZhsC43lrV0ztSCZilK2EOWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $('Extract user data').item.json.timestamp }}",
+            "User_id": "={{ $('Extract user data').item.json.user_id }}",
+            "User_name": "={{ $('Extract user data').item.json.user_name }}",
+            "username": "={{ $('Extract user data').item.json.username }}",
+            "Message_text": "={{ $('Extract user data').item.json.message_text }}",
+            "Chat_id": "={{ $('Extract user data').item.json.chat_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "User_id",
+              "displayName": "User_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "User_name",
+              "displayName": "User_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message_text",
+              "displayName": "Message_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Chat_id",
+              "displayName": "Chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Response_Type",
+              "displayName": "Response_Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Category",
+              "displayName": "Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1216,
+        160
+      ],
+      "id": "31dfcd60-a4ac-4558-9e77-08200cffb064",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "W3Xw8h4LKL4OFKCn",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b55accfd-a1e0-4e5b-b6c4-ce2eaa184bf2",
+              "name": "Response_Type",
+              "value": "Help query",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        944,
+        -112
+      ],
+      "id": "18e6ff95-6ba8-48d8-8688-3db9ff93d76f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "19LOYfak0qow7YwZgJQdpqCccT7hYcmsycfDsc19bUXI",
+          "mode": "list",
+          "cachedResultName": "Support_log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19LOYfak0qow7YwZgJQdpqCccT7hYcmsycfDsc19bUXI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1OgzNkq_jBMQrWIzxCtsmZhsC43lrV0ztSCZilK2EOWk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $('Extract user data').item.json.timestamp }}",
+            "User_id": "={{ $('Extract user data').item.json.user_id }}",
+            "User_name": "={{ $('Extract user data').item.json.user_name }}",
+            "username": "={{ $('Extract user data').item.json.username }}",
+            "Message_text": "={{ $('Extract user data').item.json.message_text }}",
+            "Chat_id": "={{ $('Extract user data').item.json.chat_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "User_id",
+              "displayName": "User_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "User_name",
+              "displayName": "User_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "username",
+              "displayName": "username",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message_text",
+              "displayName": "Message_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Chat_id",
+              "displayName": "Chat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1072,
+        496
+      ],
+      "id": "9c2ef1d4-d033-4fdd-8d48-18b32e3de7dc",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "W3Xw8h4LKL4OFKCn",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Extract user data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract user data": {
+      "main": [
+        [
+          {
+            "node": "is FAQ",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "is order inquiry",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Need Human help?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "is billing query",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "is help required",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Has Order ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is FAQ": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Need Human help?": {
+      "main": [
+        [
+          {
+            "node": "Send a text message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is order inquiry": {
+      "main": [
+        [
+          {
+            "node": "Has Order ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is billing query": {
+      "main": [
+        [
+          {
+            "node": "Send a text message4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is help required": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Order ID": {
+      "main": [
+        [
+          {
+            "node": "Send a text message3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message4": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message3": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message5": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "015d39e3-a7c3-4bfd-8178-52aaf6b79524",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9ca641d53234cc04b831f644dea2a2e2540699b5a09eb17c9940ffd2b019ef1"
+  },
+  "id": "rbC7Vy80WQrONSew",
+  "tags": []
+}
