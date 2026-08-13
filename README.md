@@ -60,8 +60,10 @@ This project was built to demonstrate how a lightweight, no-code automation plat
 7. Activate the workflow in the n8n editor.
 8. Test by messaging the bot on Telegram (e.g., `/help`, `/faq`, `/contact`, or an order ID such as `ORD12345`).
 
+## 📸 Workflow Screenshots
 
+### 🔄 Main Flow
 
+![Workflow](./Workflow.jpg)
 
-7. Start ngrok to expose the local instance:
-
+*The main workflow that handles incoming Telegram messages and routes them based on user intent.*   
